@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Bank | Java OOP Banking System</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="bank-layout">
+    <!-- Sidebar -->
+    <aside class="bank-sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z"/></svg>
+        </div>
+        <div class="brand-text">
+          <div class="title">ApexBank</div>
+          <div class="badge">OOP Java Architecture</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="accounts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          Accounts Overview
+        </button>
+        <button class="nav-item" data-tab="transact">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Deposit & Withdraw
+        </button>
+        <button class="nav-item" data-tab="transfer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+          Inter-Account Transfer
+        </button>
+      </nav>
+
+      <div class="oop-principles-card">
+        <div class="card-caption">OOP Concepts Illustrated</div>
+        <ul>
+          <li><strong>Abstraction:</strong> Base <code>Account</code> class</li>
+          <li><strong>Inheritance:</strong> Savings & Checking</li>
+          <li><strong>Polymorphism:</strong> Dynamic <code>withdraw()</code></li>
+          <li><strong>Encapsulation:</strong> Safe balance states</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="bank-main">
+      <header class="main-topbar">
+        <div>
+          <h2>Client Portal & Account Management</h2>
+          <p class="subtitle">Experience real-time polymorphic account behaviors and transaction processing</p>
+        </div>
+        <div class="user-chip">
+          <div class="avatar">AV</div>
+          <div class="info">
+            <span class="name">Alice Vance</span>
+            <span class="role">Verified Customer</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Toast notifications -->
+      <div id="toastMessage" class="toast hidden"></div>
+
+      <!-- Account Cards Grid -->
+      <section class="accounts-grid">
+        <!-- Savings Account Card -->
+        <div class="account-card savings-theme" id="cardSavings">
+          <div class="card-top">
+            <span class="acc-type-pill">Savings Account</span>
+            <span class="acc-num" id="savingsAccNum">SA-1001</span>
+          </div>
+          <div class="acc-balance-label">Total Cleared Balance</div>
+          <div class="acc-balance" id="savingsBalance">$1,500.00</div>
+          <div class="acc-meta-grid">
+            <div>
+              <span class="meta-label">Min Balance:</span>
+              <span class="meta-val" id="savingsMinBal">$200.00</span>
+            </div>
+            <div>
+              <span class="meta-label">Annual APY:</span>
+              <span class="meta-val">4.50%</span>
+            </div>
+          </div>
+          <button class="btn btn-interest" id="applyInterestBtn">Credit Monthly Interest</button>
+        </div>
+
+        <!-- Checking Account Card -->
+        <div class="account-card checking-theme" id="cardChecking">
+          <div class="card-top">
+            <span class="acc-type-pill">Checking Account</span>
+            <span class="acc-num" id="checkingAccNum">CA-2002</span>
+          </div>
+          <div class="acc-balance-label">Available Balance</div>
+          <div class="acc-balance" id="checkingBalance">$500.00</div>
+          <div class="acc-meta-grid">
+            <div>
+              <span class="meta-label">Overdraft Limit:</span>
+              <span class="meta-val" id="checkingOdLimit">$300.00</span>
+            </div>
+            <div>
+              <span class="meta-label">Overdraft Penalty:</span>
+              <span class="meta-val">$25.00</span>
+            </div>
+          </div>
+          <div class="od-status" id="odStatus">Status: In Normal Range</div>
+        </div>
+      </section>
+
+      <!-- Operations Section -->
+      <section class="operations-grid">
+        <!-- Quick Action Form -->
+        <div class="panel form-panel">
+          <h3 class="panel-title">Execute Account Operation</h3>
+          <form id="operationForm">
+            <div class="form-group">
+              <label>Select Target Account</label>
+              <select id="opAccount">
+                <option value="savings">Savings Account (SA-1001)</option>
+                <option value="checking">Checking Account (CA-2002)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Transaction Type</label>
+              <div class="radio-toggle">
+                <label><input type="radio" name="txType" value="deposit" checked> <span>Deposit</span></label>
+                <label><input type="radio" name="txType" value="withdraw"> <span>Withdraw</span></label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Amount (USD)</label>
+              <input type="number" id="opAmount" min="1" step="0.01" placeholder="e.g. 150.00" required>
+            </div>
+
+            <div class="form-group">
+              <label>Description Note</label>
+              <input type="text" id="opNote" placeholder="e.g. Payroll or Groceries">
+            </div>
+
+            <button type="submit" class="btn btn-primary full-width">Process Transaction</button>
+          </form>
+        </div>
+
+        <!-- Inter Account Transfer Panel -->
+        <div class="panel transfer-panel">
+          <h3 class="panel-title">Inter-Account Funds Transfer</h3>
+          <form id="transferForm">
+            <div class="form-group">
+              <label>Source Account</label>
+              <select id="transferFrom">
+                <option value="savings">Savings Account (SA-1001)</option>
+                <option value="checking">Checking Account (CA-2002)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Destination Account</label>
+              <select id="transferTo">
+                <option value="checking">Checking Account (CA-2002)</option>
+                <option value="savings">Savings Account (SA-1001)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Transfer Amount (USD)</label>
+              <input type="number" id="transferAmount" min="1" step="0.01" placeholder="e.g. 250.00" required>
+            </div>
+
+            <button type="submit" class="btn btn-secondary full-width">Confirm Transfer</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Ledger Section -->
+      <section class="panel ledger-panel">
+        <div class="ledger-header">
+          <h3 class="panel-title">Transaction Ledger History</h3>
+          <button class="btn btn-ghost" id="clearLedgerBtn">Reset Sample Data</button>
+        </div>
+        <div class="table-responsive">
+          <table class="ledger-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Timestamp</th>
+                <th>Account</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Balance After</th>
+                <th>Memo / Description</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
